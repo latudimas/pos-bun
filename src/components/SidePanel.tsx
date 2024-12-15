@@ -1,11 +1,17 @@
-import { html } from '@elysiajs/html'
+import { PanelHeader } from './panel/PanelHeader';
+import { PanelContent } from './panel/PanelContent';
+import { ResizeHandle } from './panel/ResizeHandle';
 
-export const SidePanel = ({ children }: { children?: any }) => html`
-  <aside class="side-panel">
-    <div class="resize-handle"></div>
-    <button class="toggle-panel">☰</button>
-    <div class="panel-content">
-      ${children}
+const SidePanel = () => {
+  return /*html*/`
+    <div class="side-panel-container">
+      <div id="side-panel" class="side-panel">
+        ${PanelHeader()}
+        ${PanelContent()}
+      </div>
+      ${ResizeHandle()}
     </div>
-  </aside>
-`
+  `;
+};
+
+export { SidePanel };
