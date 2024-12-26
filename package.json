@@ -9,14 +9,15 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "dependencies": {
+    "@elysiajs/html": "^1.1.1",
+    "@kitajs/ts-html-plugin": "^4.1.1",
+    "elysia": "^1.1.26"
+  },
   "scripts": {
-    "dev": "bun --watch src/index.ts",
+    "dev": "bun --watch src/index.tsx",
     "build": "bun build src/index.ts --target bun --outdir ./dist",
     "start": "NODE_ENV=production bun dist/index.js",
     "test": "bun test"
-  },
-  "dependencies": {
-    "@elysiajs/html": "^1.1.1",
-    "elysia": "^1.1.26"
   }
 }

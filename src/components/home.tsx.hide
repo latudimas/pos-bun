@@ -1,0 +1,21 @@
+import { Html } from "@elysiajs/html"
+
+export type HomeType = {
+  title?: string
+  children?: JSX.Element
+}
+
+export function Home({ title, children }: Html.PropsWithChildren<HomeType>): JSX.Element {
+  return (
+    <div class="m-8">
+      <h1 class="text-8xl font-bold" safe>
+        {title}.
+      </h1>
+      <form action="/">
+
+        <input
+      </form>
+
+    </div>
+  )
+}
