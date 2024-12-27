@@ -4,19 +4,24 @@
   "type": "module",
   "devDependencies": {
     "@types/bun": "^1.1.14",
-    "@types/react": "^19.0.1"
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@elysiajs/html": "^1.1.1",
+    "@elysiajs/static": "^1.2.0",
+    "@kitajs/html": "^4.2.6",
     "@kitajs/ts-html-plugin": "^4.1.1",
     "elysia": "^1.1.26"
   },
   "scripts": {
     "dev": "bun --watch src/index.tsx",
     "build": "bun build src/index.ts --target bun --outdir ./dist",
+    "build:tailwind": "bunx tailwindcss -i ./src/style/tailwind.css -o ./public/output.css --watch",
     "start": "NODE_ENV=production bun dist/index.js",
     "test": "bun test"
   }
