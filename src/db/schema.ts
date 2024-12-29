@@ -6,7 +6,7 @@ export const products = sqliteTable("products", {
   name: text("name").notNull(),
   price: integer("price").notNull(),
   stock: integer("stock").notNull().default(0),
-  sku: text("sku").unique(),
+  sku: text("sku").notNull().unique(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

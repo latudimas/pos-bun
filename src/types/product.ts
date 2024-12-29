@@ -3,7 +3,7 @@ export type Product = {
   name: string;
   price: number;
   stock: number;
-  sku: string;
+  sku: string | null;
   createdAt: Date;
 };
 

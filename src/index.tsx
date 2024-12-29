@@ -6,10 +6,12 @@ import { HomePage } from "./pages/Homepage";
 import { BaseHtml } from "./components/layout/BaseHtml";
 import { db } from "./db";
 import { products } from "./db/schema";
+import { productsRoute } from "./routes/products";
 
 const app = new Elysia()
   .use(html())
   .use(staticPlugin())
+  .use(productsRoute)
   .get("/", ({ html }) =>
     html(
       <BaseHtml>
