@@ -5,16 +5,16 @@ import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { products } from "../db/schema";
 import { ProductsPage } from "../pages/products";
-import { BaseHtml } from "../components/layout/BaseHtml";
+import { BasePage } from "../components/layout/BasePage";
 
 export const productsRoute = new Elysia()
   .use(html())
   .get("/products", async () => {
     const productsList = db.select().from(products).all();
     return (
-      <BaseHtml>
+      <BasePage>
         <ProductsPage products={productsList} />
-      </BaseHtml>
+      </BasePage>
     );
   });
 // .post('/products', async ({ body }) => {
