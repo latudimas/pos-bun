@@ -1,5 +1,0 @@
-Resource about Elysia and templating
-
-- Template Engine for Elysia -> https://discord.com/channels/1044804142461362206/1177960802821611683
-
-
