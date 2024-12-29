@@ -4,6 +4,8 @@ import { staticPlugin } from "@elysiajs/static";
 
 import { HomePage } from "./pages/Homepage";
 import { BaseHtml } from "./components/layout/BaseHtml";
+import { db } from "./db";
+import { products } from "./db/schema";
 
 const app = new Elysia()
   .use(html())
@@ -22,6 +24,18 @@ const app = new Elysia()
         {message}
       </div>
     );
+  })
+  .get("/test", () => {
+    const product: typeof products.$inferInsert = {
+      id: 1,
+      name: "product 01",
+      price: 1000,
+      stock: 11,
+      sku: "sku-01",
+    };
+    const result = db.insert(products).values(product);
+    console.log(`INSERT DATA -> ${result}`);
+    return result;
   })
   .listen(3000);
 
