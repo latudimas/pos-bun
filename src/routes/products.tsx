@@ -5,17 +5,13 @@ import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { products } from "../db/schema";
 import { ProductsPage } from "../pages/products";
-import { BasePage } from "../components/layout/BasePage";
+import { BaseLayout } from "../components/layout/BaseLayout";
 
 export const productsRoute = new Elysia()
   .use(html())
   .get("/products", async () => {
     const productsList = db.select().from(products).all();
-    return (
-      <BasePage>
-        <ProductsPage products={productsList} />
-      </BasePage>
-    );
+    return <ProductsPage products={productsList} />;
   });
 // .post('/products', async ({ body }) => {
 //   const newProduct = await db.insert(products).values({
