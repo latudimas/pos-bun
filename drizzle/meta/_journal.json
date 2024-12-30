@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1735460217392,
+      "tag": "0000_deep_mister_fear",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1735480913317,
+      "tag": "0001_productive_vector",
+      "breakpoints": true
+    }
+  ]
+}
