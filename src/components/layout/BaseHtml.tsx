@@ -14,31 +14,7 @@ type BaseHtmlProps = {
   title?: string;
 };
 
-// const Head = ({ title }: { title: string }) => (
-//   <head>
-//     <meta charset="UTF-8" />
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-//     <title safe>{title}</title>
-//     <link rel="stylesheet" href="/public/output.css" />
-//     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-//   </head>
-// );
-//
-// export const BaseHtml = ({
-//   children,
-//   title = "🥟 POS Bun 🥟",
-// }: BaseHtmlProps) => {
-//   return (
-//     <>
-//       {"<!DOCTYPE html>"}
-//       <html lang="en">
-//         <Head title={title} />
-//         <body>{children}</body>
-//       </html>
-//     </>
-//   );
-// };
-
+// HTML style BaseHtml Components
 export const BaseHtml = ({
   children,
   title = "🥟 POS Bun 🥟",
@@ -58,4 +34,26 @@ export const BaseHtml = ({
         ${children}
     </body>
     </html>`;
+};
+
+// JSX style BaseHtml Components
+export const BaseHtmlJsx = ({ children }: { children: JSX.Element }) => {
+  return (
+    <>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <title>JSX LAYOUT</title>
+          <link rel="stylesheet" href="/public/output.css" />
+          <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        </head>
+
+        <body>{children}</body>
+      </html>
+    </>
+  );
 };

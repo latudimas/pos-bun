@@ -15,6 +15,13 @@
       "when": 1735480913317,
       "tag": "0001_productive_vector",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1735565458422,
+      "tag": "0002_blushing_wallow",
+      "breakpoints": true
     }
   ]
 }
