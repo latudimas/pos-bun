@@ -3,6 +3,7 @@ import { type Static } from "elysia";
 
 export const Product = t.Object({
   id: t.Number(),
+  barcode: t.String(),
   name: t.String(),
   price: t.Number(),
   stock: t.Number(),

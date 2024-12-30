@@ -26,6 +26,7 @@ export const ProductsPage = ({ products = [] }: ProductPageProps) => (
           <thead>
             <tr>
               <th class="px-4 py-2">SKU</th>
+              <th class="px-4 py-2">Barcode</th>
               <th class="px-4 py-2">Name</th>
               <th class="px-4 py-2">Price</th>
               <th class="px-4 py-2">Stock</th>
@@ -37,6 +38,9 @@ export const ProductsPage = ({ products = [] }: ProductPageProps) => (
               <tr id={`product-${product.id}`}>
                 <td class="border px-4 py-2" safe>
                   {product.sku}
+                </td>
+                <td class="border px-4 py-2" safe>
+                  {product.barcode}
                 </td>
                 <td class="border px-4 py-2" safe>
                   {product.name}

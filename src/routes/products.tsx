@@ -20,6 +20,7 @@ export const productsRoute = new Elysia()
         .insert(products)
         .values({
           name: body.name,
+          barcode: body.barcode,
           price: body.price,
           stock: body.stock,
           sku: body.sku,
