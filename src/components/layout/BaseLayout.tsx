@@ -5,24 +5,9 @@ import { BaseHtml } from "./BaseHtml";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
 
-type Children =
-  | JSX.Element
-  | JSX.Element[]
-  | string
-  | number
-  | null
-  | undefined;
-
 type BaseLayoutProps = {
-  children: Children;
+  children: JSX.Element;
   title?: string;
-};
-
-const safeContent = ({ children }: { children: Children }) => {
-  if (Array.isArray(children)) {
-    return children.map((child) => <div> {child}</div>);
-  }
-  return <div safe> {children}</div>;
 };
 
 export const BaseLayout = ({ children, title }: BaseLayoutProps) => {

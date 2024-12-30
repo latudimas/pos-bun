@@ -5,8 +5,8 @@ async function seed() {
   try {
     // Insert sample data
     await db.insert(products).values([
-      { name: "Product 1", price: 1000, stock: 10, sku: "SKU001" },
-      { name: "Product 2", price: 2000, stock: 20, sku: "SKU002" },
+      { name: "Product 3", price: 3000, stock: 30, sku: "SKU003" },
+      { name: "Product 4", price: 4000, stock: 40, sku: "SKU004" },
     ]);
 
     console.log("Seeding completed successfully");
