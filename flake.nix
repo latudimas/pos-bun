@@ -25,7 +25,7 @@
             echo "🚀 Welcome to your Bun/TypeScript development environment!"
             echo "📦 Bun version: $(bun --version)"
             echo "🗃️  SQLite version: $(sqlite3 --version)"
-            exec zsh
+            # exec zsh
           '';
         };
       });
