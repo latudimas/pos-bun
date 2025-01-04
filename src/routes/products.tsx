@@ -6,6 +6,7 @@ import { db } from "../db";
 import { products } from "../db/schema";
 import { ProductsPage } from "../pages/products";
 import { Product } from "../types/product";
+import { ProductDetailModal } from "../components/modals/ProductDetailModal";
 
 export const productsRoute = new Elysia()
   .use(html())
@@ -60,4 +61,16 @@ export const productsRoute = new Elysia()
     {
       body: Product,
     },
-  );
+  )
+  .get("/products/:id/detail", ({ params }) => {
+    const product = db
+      .select()
+      .from(products)
+      .where(eq(products.id, parseInt(params.id)))
+      .get();
+
+    if (!product) {
+      return new Response("Product Not Found", { status: 404 });
+    }
+    return <ProductDetailModal product={product} />;
+  });

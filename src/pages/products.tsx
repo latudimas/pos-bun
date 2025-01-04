@@ -2,12 +2,17 @@ import { Html } from "@elysiajs/html";
 
 import type { Product } from "../types/product";
 import { BaseLayout } from "../components/layout/BaseLayout";
+import { ProductDetailModal } from "../components/modals/ProductDetailModal";
 
 type ProductPageProps = {
   products: Product[];
+  selectedProduct?: Product;
 };
 
-export const ProductsPage = ({ products = [] }: ProductPageProps) => (
+export const ProductsPage = ({
+  products = [],
+  selectedProduct,
+}: ProductPageProps) => (
   <BaseLayout>
     <div class="p-4">
       <div class="flex justify-between items-center mb-4">
@@ -50,10 +55,17 @@ export const ProductsPage = ({ products = [] }: ProductPageProps) => (
                 <td class="border px-4 py-2">
                   <button
                     hx-get={`/products/${product.id}/edit`}
-                    hx-taget="#modal"
+                    hx-target="#modal"
                     class="text-blue-500 mr-2"
                   >
                     Edit
+                  </button>
+                  <button
+                    hx-get={`/products/${product.id}/detail`}
+                    hx-target="#detail-modal"
+                    class="text-blue-500 mr-2"
+                  >
+                    View
                   </button>
                 </td>
               </tr>
@@ -62,7 +74,11 @@ export const ProductsPage = ({ products = [] }: ProductPageProps) => (
         </table>
       </div>
 
+      {/* Modals */}
       <div id="modal"></div>
+      <div id="detail-modal" safe>
+        {selectedProduct && <ProductDetailModal product={selectedProduct} />}
+      </div>
     </div>
   </BaseLayout>
 );
