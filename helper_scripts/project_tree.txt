@@ -1,0 +1,28 @@
+src
+├── index.tsx
+│   types
+│   ├── product.ts
+├── .DS_Store
+│   style
+│   ├── tailwind.css
+│   components
+│   │   ui
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   ├── .DS_Store
+│   │   products
+│   │   ├── ProductForm.tsx
+│   │   layout
+│   │   ├── BaseHtml.tsx
+│   │   ├── TopBar.tsx
+│   │   ├── BaseLayout.tsx
+│   │   ├── Sidebar.tsx
+│   db
+│   ├── schema.ts
+│   ├── seed.ts
+│   ├── index.ts
+│   pages
+│   ├── products.tsx
+│   ├── Homepage.tsx
+│   routes
+│   ├── products.tsx

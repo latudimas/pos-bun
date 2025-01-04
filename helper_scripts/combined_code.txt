@@ -1,0 +1,677 @@
+"src/index.tsx"
+import { Elysia } from "elysia";
+import { html, Html } from "@elysiajs/html";
+import { staticPlugin } from "@elysiajs/static";
+
+import { HomePage } from "./pages/Homepage";
+import { BaseHtml } from "./components/layout/BaseHtml";
+import { db } from "./db";
+import { products } from "./db/schema";
+import { productsRoute } from "./routes/products";
+
+const app = new Elysia()
+  .use(html())
+  .use(staticPlugin())
+  .use(productsRoute)
+  .get("/", ({ html }) =>
+    html(
+      <BaseHtml>
+        <HomePage />
+      </BaseHtml>,
+    ),
+  )
+  .post("/show-message", ({ body }) => {
+    const { message } = body as { message: string };
+    return (
+      <div class="font-medium text-gray-700" safe>
+        {message}
+      </div>
+    );
+  })
+  .get("/test", () => {
+    const product: typeof products.$inferInsert = {
+      id: 1,
+      name: "product 01",
+      price: 1000,
+      stock: 11,
+      sku: "sku-01",
+    };
+    const result = db.insert(products).values(product);
+    console.log(`INSERT DATA -> ${result}`);
+    return result;
+  })
+  .listen(3000);
+
+console.log(
+  `🦊 Server is running at ${app.server?.hostname}:${app.server?.port}`,
+);
+
+========================================================
+"src/types/product.ts"
+import { t } from "elysia";
+import { type Static } from "elysia";
+
+export const Product = t.Object({
+  id: t.Number(),
+  barcode: t.String(),
+  name: t.String(),
+  price: t.Number(),
+  stock: t.Number(),
+  sku: t.String(),
+  createdAt: t.String(),
+});
+
+export type Product = Static<typeof Product>;
+
+export const ProductFormData = t.Object({
+  name: t.String(),
+  price: t.Number(),
+  stock: t.Number(),
+  sku: t.String(),
+});
+
+export type ProductFormData = Static<typeof ProductFormData>;
+
+========================================================
+"src/components/ui/Button.tsx"
+import { Html } from "@elysiajs/html";
+
+type ButtonProps = {
+  children: any;
+  type?: "button" | "submit";
+};
+
+export const Button = ({ children, type = "button" }: ButtonProps) => (
+  <button
+    type={type}
+    class="w-full flex justify-center py-2.5 px-4 rounded-lg
+           text-sm font-medium text-white
+           bg-blue-500 hover:bg-blue-600
+           transition-colors duration-200 ease-in-out
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
+    safe
+  >
+    {children}
+  </button>
+);
+
+========================================================
+"src/components/ui/Input.tsx"
+import { Html } from "@elysiajs/html";
+
+type InputProps = {
+  name: string;
+  placeholder?: string;
+  type?: string;
+};
+
+export const Input = ({ name, placeholder, type = "text" }: InputProps) => (
+  <input
+    type={type}
+    name={name}
+    placeholder={placeholder}
+    class="mt-1 block w-full rounded-lg border border-gray-200 
+           shadow-sm p-3 text-gray-600
+           focus:border-blue-400 focus:ring focus:ring-blue-100 
+           transition-colors duration-200 ease-in-out
+           placeholder-gray-400"
+  />
+);
+
+========================================================
+"src/components/products/ProductForm.tsx"
+import { Html } from "@elysiajs/html";
+
+import type { ProductFormData } from "../../types/product";
+
+type ProductFormProps = {
+  initialData?: ProductFormData;
+  action: string;
+  method: string;
+};
+
+export const ProductForm = ({
+  initialData,
+  action,
+  method,
+}: ProductFormProps) => (
+  <form hx-post={action} hx-trigger="submit" class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-1">SKU</label>
+      <input
+        type="text"
+        name="sku"
+        value={initialData?.sku}
+        class="w-full border rounded px-3 py-2"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1" for="name">
+        Product Name
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value={initialData?.name}
+        class="w-full border rounded px-3 py-2"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1" for="price">
+        Price
+      </label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        value={initialData?.price.toString()}
+        class="w-full border rounded px-3 py-2"
+        min="0"
+        step="1000"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1" for="stock">
+        Stock
+      </label>
+      <input
+        type="number"
+        id="stock"
+        name="stock"
+        value={initialData?.stock.toString()}
+        class="w-full border rounded px-3 py-2"
+        min="0"
+        step="1"
+        required
+      />
+    </div>
+
+    <div class="flex justify-end space-x-3 pt-4 border-t">
+      <button
+        type="button"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+        hx-get="/products"
+        hx-target="#modal"
+        hx-swap="outerHTML"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+      >
+        {initialData ? "Update Product" : "Create Product"}
+      </button>
+    </div>
+
+    {/* Error message container */}
+    <div id="error-message" class="hidden text-red-600 text-sm mt-2"></div>
+  </form>
+);
+
+========================================================
+"src/components/layout/BaseHtml.tsx"
+import type { PropsWithChildren } from "@kitajs/html";
+import { Html } from "@elysiajs/html";
+
+type Children =
+  | JSX.Element
+  | JSX.Element[]
+  | string
+  | number
+  | null
+  | undefined;
+
+type BaseHtmlProps = {
+  children: Children;
+  title?: string;
+};
+
+// HTML style BaseHtml Components
+export const BaseHtml = ({
+  children,
+  title = "🥟 POS Bun 🥟",
+}: BaseHtmlProps) => {
+  // const renderChildren = Array.isArray(children) ? children.join("") : children;
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>${title}</title>
+        <link rel="stylesheet" href="/public/output.css" />
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    </head>
+    <body>
+        ${children}
+    </body>
+    </html>`;
+};
+
+// JSX style BaseHtml Components
+export const BaseHtmlJsx = ({ children }: { children: JSX.Element }) => {
+  return (
+    <>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <title>JSX LAYOUT</title>
+          <link rel="stylesheet" href="/public/output.css" />
+          <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        </head>
+
+        <body>{children}</body>
+      </html>
+    </>
+  );
+};
+
+========================================================
+"src/components/layout/TopBar.tsx"
+import { Html } from "@elysiajs/html";
+
+export const TopBar = () => (
+  <div class="bg-white border-b border-gray-200 p-4 flex items-center">
+    <button
+      id="sidebar-toggle"
+      class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      onclick={`
+        const sidebar = document.getElementById('sidebar');
+        const content = document.querySelector('.ml-0');
+        if (sidebar.classList.contains('-translate-x-full')) {
+          sidebar.classList.remove('-translate-x-full');
+          content.classList.remove('ml-0');
+          content.classList.add('ml-64');
+        } else {
+          sidebar.classList.add('-translate-x-full');
+          content.classList.remove('ml-64');
+          content.classList.add('ml-0');
+        }
+      `}
+    >
+      <svg
+        class="w-6 h-6 text-gray-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+  </div>
+);
+
+========================================================
+"src/components/layout/BaseLayout.tsx"
+import { PropsWithChildren } from "@kitajs/html";
+import { Html } from "@elysiajs/html";
+
+import { BaseHtml } from "./BaseHtml";
+import { Sidebar } from "./Sidebar";
+import { TopBar } from "./TopBar";
+
+type BaseLayoutProps = {
+  children: JSX.Element;
+  title?: string;
+};
+
+export const BaseLayout = ({ children, title }: BaseLayoutProps) => {
+  return (
+    <BaseHtml title={title}>
+      <div class="min-h-screen bg-gray-100 flex">
+        <Sidebar />
+        <div class="flex-1 min-w-0 ml-0 transition-margin duration-300 ease-in-out">
+          <TopBar />
+          <main class="p-6">{children}</main>
+        </div>
+      </div>
+    </BaseHtml>
+  );
+};
+
+========================================================
+"src/components/layout/Sidebar.tsx"
+import { Html } from "@elysiajs/html";
+
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+const navItems: NavItem[] = [
+  { label: "Dashboard", href: "#" },
+  { label: "Products", href: "#" },
+  { label: "Settings", href: "#" },
+  { label: "Account", href: "#" },
+];
+// components/Sidebar.tsx
+// export const Sidebar = () => {
+export const Sidebar = () => (
+  <div
+    id="sidebar"
+    class="fixed inset-y-0 left-0 z-30 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out bg-white border-r border-gray-200"
+  >
+    <div class="flex flex-col h-full">
+      <div class="p-4 border-b border-gray-200">
+        <h2 class="text-xl font-medium text-gray-800">Mini Market POS</h2>
+      </div>
+      <nav class="flex-1 p-4 space-y-2">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="block px-4 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+            safe
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </div>
+);
+
+========================================================
+"src/db/schema.ts"
+import { sql } from "drizzle-orm";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+
+export const products = sqliteTable("products", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull(),
+  barcode: text("barcode").unique().notNull().default("000000"),
+  price: integer("price").notNull(),
+  stock: integer("stock").notNull().default(0),
+  sku: text("sku").notNull().unique(),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const table = {
+  products,
+} as const;
+
+export type Table = typeof table;
+
+========================================================
+"src/db/seed.ts"
+import { db } from ".";
+import { products } from "./schema";
+
+async function seed() {
+  try {
+    // Cleansing step for development environment
+    await db.delete(products);
+    console.log("Database cleansed for development seeding");
+
+    // Insert sample data
+    await db.insert(products).values([
+      {
+        name: "Product 1",
+        barcode: "00001",
+        price: 1000,
+        stock: 10,
+        sku: "SKU001",
+      },
+      {
+        name: "Product 2",
+        barcode: "00002",
+        price: 2000,
+        stock: 20,
+        sku: "SKU002",
+      },
+      {
+        name: "Product 3",
+        barcode: "00003",
+        price: 3000,
+        stock: 30,
+        sku: "SKU003",
+      },
+      {
+        name: "Product 4",
+        barcode: "00004",
+        price: 4000,
+        stock: 40,
+        sku: "SKU004",
+      },
+      {
+        name: "Product 5",
+        barcode: "00005",
+        price: 4000,
+        stock: 50,
+        sku: "SKU005",
+      },
+    ]);
+    console.log("Seeding completed successfully");
+  } catch (error) {
+    console.log("Error seeding database", error);
+    throw error;
+  }
+}
+
+seed();
+
+========================================================
+"src/db/index.ts"
+import { drizzle } from "drizzle-orm/bun-sqlite";
+import { Database } from "bun:sqlite";
+import * as schema from "./schema";
+
+const sqlite = new Database(process.env.DB_FILE_NAME!);
+export const db = drizzle(sqlite, { schema });
+
+// Migration
+import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+
+export async function runMigrations() {
+  try {
+    await migrate(db, {
+      migrationsFolder: "../../drizzle",
+    });
+    console.log("Migration completed successfully");
+  } catch (error) {
+    console.log("Error running migrations", error);
+    throw error;
+  }
+}
+
+========================================================
+"src/pages/products.tsx"
+import { Html } from "@elysiajs/html";
+
+import type { Product } from "../types/product";
+import { BaseLayout } from "../components/layout/BaseLayout";
+
+type ProductPageProps = {
+  products: Product[];
+};
+
+export const ProductsPage = ({ products = [] }: ProductPageProps) => (
+  <BaseLayout>
+    <div class="p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Products</h1>
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+          hx-get="/products/new"
+          hx-target="#modal"
+        >
+          Add Product
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr>
+              <th class="px-4 py-2">SKU</th>
+              <th class="px-4 py-2">Barcode</th>
+              <th class="px-4 py-2">Name</th>
+              <th class="px-4 py-2">Price</th>
+              <th class="px-4 py-2">Stock</th>
+              <th class="px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product: Product) => (
+              <tr id={`product-${product.id}`}>
+                <td class="border px-4 py-2" safe>
+                  {product.sku}
+                </td>
+                <td class="border px-4 py-2" safe>
+                  {product.barcode}
+                </td>
+                <td class="border px-4 py-2" safe>
+                  {product.name}
+                </td>
+                <td class="border px-4 py-2">{product.price}</td>
+                <td class="border px-4 py-2">{product.stock}</td>
+                <td class="border px-4 py-2">
+                  <button
+                    hx-get={`/products/${product.id}/edit`}
+                    hx-taget="#modal"
+                    class="text-blue-500 mr-2"
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div id="modal"></div>
+    </div>
+  </BaseLayout>
+);
+
+========================================================
+"src/pages/Homepage.tsx"
+import { Html } from "@elysiajs/html";
+
+import { Input } from "../components/ui/Input";
+import { Button } from "../components/ui/Button";
+import { Sidebar } from "../components/layout/Sidebar";
+import { TopBar } from "../components/layout/TopBar";
+
+export const HomePage = () => (
+  <div class="min-h-screen bg-gray-50 flex">
+    <Sidebar />
+
+    {/* Main Content */}
+    <div class="flex-1 min-w-0 ml-0 transition-margin duration-300 ease-in-out">
+      <TopBar />
+
+      {/* Page Content */}
+      <div class="p-6">
+        <div class="max-w-md mx-auto">
+          <div class="space-y-4">
+            <h1 class="text-2xl font-medium text-gray-800 text-center mb-8">
+              Welcome
+            </h1>
+            <form
+              class="space-y-4"
+              hx-post="/show-message"
+              hx-target="#message-display"
+              hx-swap="innerHTML"
+            >
+              <div>
+                <Input name="message" placeholder="Enter your message" />
+              </div>
+              <Button type="submit">Show Message</Button>
+            </form>
+            <div
+              id="message-display"
+              class="mt-6 text-center p-4 text-gray-600"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+========================================================
+"src/routes/products.tsx"
+import { Elysia } from "elysia";
+import { html, Html } from "@elysiajs/html";
+import { eq } from "drizzle-orm";
+
+import { db } from "../db";
+import { products } from "../db/schema";
+import { ProductsPage } from "../pages/products";
+import { Product } from "../types/product";
+
+export const productsRoute = new Elysia()
+  .use(html())
+  .get("/products", async () => {
+    const productsList = db.select().from(products).all();
+    return <ProductsPage products={productsList} />;
+  })
+  .post(
+    "/products",
+    async ({ body }) => {
+      const newProduct = await db
+        .insert(products)
+        .values({
+          name: body.name,
+          barcode: body.barcode,
+          price: body.price,
+          stock: body.stock,
+          sku: body.sku,
+        })
+        .returning();
+      return newProduct;
+    },
+    {
+      body: Product,
+    },
+  )
+  .get("/products/:id/edit", async ({ params }) => {
+    const product = db
+      .select()
+      .from(products)
+      .where(eq(products.id, parseInt(params.id)))
+      .get();
+
+    // Return edit form component here
+    return product;
+  })
+  .put(
+    "/products/:id",
+    async ({ params, body }) => {
+      const updatedProduct = await db
+        .update(products)
+        .set({
+          name: body.name,
+          price: body.price,
+          stock: body.stock,
+          sku: body.sku,
+        })
+        .where(eq(products.id, parseInt(params.id)))
+        .returning();
+      return updatedProduct;
+    },
+    {
+      body: Product,
+    },
+  );
+
+========================================================
