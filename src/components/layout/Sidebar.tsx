@@ -11,8 +11,7 @@ const navItems: NavItem[] = [
   { label: "Settings", href: "#" },
   { label: "Account", href: "#" },
 ];
-// components/Sidebar.tsx
-// export const Sidebar = () => {
+
 export const Sidebar = () => (
   <div
     id="sidebar"
