@@ -1,7 +1,7 @@
 import { Html } from "@elysiajs/html";
 
-export const NavbarDaisy = () => (
-  <div class="navbar bg-base-100">
+export const NavbarHeader = () => (
+  <header class="navbar bg-base-100">
     <div class="flex-none">
       <button class="btn btn-square btn-ghost">
         <svg
@@ -39,5 +39,5 @@ export const NavbarDaisy = () => (
         </svg>
       </button>
     </div>
-  </div>
+  </header>
 );

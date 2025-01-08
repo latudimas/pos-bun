@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "@kitajs/html";
 import { Html } from "@elysiajs/html";
 
-import { BaseHtml } from "./BaseHtml";
-import { Sidebar } from "./Sidebar";
+import { BaseHtml, BaseHtmlJsx } from "./BaseHtml";
+import { Sidebar, SidebarDrawer } from "./Sidebar";
 import { TopBar } from "./TopBar";
-import { NavbarDaisy } from "./Navbar";
+import { NavbarHeader } from "./NavbarHeader";
 
 type BaseLayoutProps = {
   children: JSX.Element;
@@ -13,16 +13,10 @@ type BaseLayoutProps = {
 
 export const BaseLayout = ({ children, title }: BaseLayoutProps) => {
   return (
-    <BaseHtml title={title}>
-      <NavbarDaisy />
-      {/* <div class="min-h-screen bg-gray-100 flex"> */}
-      {/*   <NavbarDaisy /> */}
-      {/*   <Sidebar /> */}
-      {/*   <div class="flex-1 min-w-0 ml-0 transition-margin duration-300 ease-in-out"> */}
-      {/*     <TopBar /> */}
-      {/*     <main class="p-6">{children}</main> */}
-      {/*   </div> */}
-      {/* </div> */}
-    </BaseHtml>
+    <BaseHtmlJsx>
+      <NavbarHeader />
+      <SidebarDrawer />
+      {children}
+    </BaseHtmlJsx>
   );
 };

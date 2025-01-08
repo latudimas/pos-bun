@@ -37,7 +37,13 @@ export const BaseHtml = ({
 };
 
 // JSX style BaseHtml Components
-export const BaseHtmlJsx = ({ children }: { children: JSX.Element }) => {
+export const BaseHtmlJsx = ({
+  title = "🥟 POS Bun 🥟",
+  children,
+}: {
+  title?: string;
+  children: JSX.Element[];
+}) => {
   return (
     <>
       <html lang="en">
@@ -47,7 +53,7 @@ export const BaseHtmlJsx = ({ children }: { children: JSX.Element }) => {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
-          <title>JSX LAYOUT</title>
+          <title safe>{title}</title>
           <link rel="stylesheet" href="/public/output.css" />
           <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         </head>
