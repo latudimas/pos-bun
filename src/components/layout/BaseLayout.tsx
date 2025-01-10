@@ -2,7 +2,7 @@ import { PropsWithChildren } from "@kitajs/html";
 import { Html } from "@elysiajs/html";
 
 import { BaseHtml, BaseHtmlJsx } from "./BaseHtml";
-import { Sidebar, SidebarDrawer } from "./Sidebar";
+import { Sidebar, SidebarDrawer, SidebarGrid } from "./Sidebar";
 import { TopBar } from "./TopBar";
 import { NavbarHeader } from "./NavbarHeader";
 
@@ -14,9 +14,15 @@ type BaseLayoutProps = {
 export const BaseLayout = ({ children, title }: BaseLayoutProps) => {
   return (
     <BaseHtmlJsx>
-      <NavbarHeader />
-      <SidebarDrawer />
-      {children}
+      <div class="min-h-screen bg-gray-100 grid grid-cols-12">
+        {/* <div class="col-span-12 lg:col-span-2"> */}
+        <SidebarGrid />
+        <div class="col-span-12 lg:col-span-10">
+          <NavbarHeader />
+          {children}
+        </div>
+      </div>
+      {/* </div> */}
     </BaseHtmlJsx>
   );
 };

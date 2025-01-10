@@ -64,3 +64,18 @@ export const SidebarDrawer = () => (
     </div>
   </div>
 );
+
+export const SidebarGrid = () => (
+  <nav class="col-span-12 lg:col-span-2 bg-gray-800 text-white p-4">
+    <div class="text-xl font-bold mb-6">Navigation</div>
+    <ul class="space-y-4">
+      {navItems.map((item: NavItem) => (
+        <li>
+          <a href={item.href} safe>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+);

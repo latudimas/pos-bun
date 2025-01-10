@@ -2121,6 +2121,10 @@ html:has(.drawer-toggle:checked) {
   grid-column: span 2 / span 2;
 }
 
+.col-span-12 {
+  grid-column: span 12 / span 12;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -2160,6 +2164,10 @@ html:has(.drawer-toggle:checked) {
 
 .mt-6 {
   margin-top: 1.5rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
 }
 
 .block {
@@ -2261,6 +2269,10 @@ html:has(.drawer-toggle:checked) {
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -2390,6 +2402,26 @@ html:has(.drawer-toggle:checked) {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1));
+}
+
+.bg-base-300 {
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b3,oklch(var(--b3)/var(--tw-bg-opacity, 1)));
+}
+
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-50 {
@@ -2698,6 +2730,14 @@ html:has(.drawer-toggle:checked) {
 }
 
 @media (min-width: 1024px) {
+  .lg\:col-span-10 {
+    grid-column: span 10 / span 10;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .lg\:hidden {
     display: none;
   }

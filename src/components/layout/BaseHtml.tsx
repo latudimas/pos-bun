@@ -42,7 +42,7 @@ export const BaseHtmlJsx = ({
   children,
 }: {
   title?: string;
-  children: JSX.Element[];
+  children: JSX.Element;
 }) => {
   return (
     <>
