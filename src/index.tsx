@@ -12,13 +12,7 @@ const app = new Elysia()
   .use(html())
   .use(staticPlugin())
   .use(productsRoute)
-  .get("/", ({ html }) =>
-    html(
-      <BaseHtml>
-        <HomePage />
-      </BaseHtml>,
-    ),
-  )
+  .get("/", ({ html }) => html(<HomePage />))
   .post("/show-message", ({ body }) => {
     const { message } = body as { message: string };
     return (
