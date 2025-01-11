@@ -6,8 +6,8 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", href: "#" },
-  { label: "Products", href: "#" },
+  { label: "Dashboard", href: "/" },
+  { label: "Products", href: "/products" },
   { label: "Settings", href: "#" },
   { label: "Account", href: "#" },
 ];
