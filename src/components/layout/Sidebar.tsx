@@ -8,8 +8,8 @@ type NavItem = {
 const navItems: NavItem[] = [
   { label: "Dashboard", href: "/" },
   { label: "Products", href: "/products" },
-  { label: "Settings", href: "#" },
-  { label: "Account", href: "#" },
+  { label: "Account", href: "/account" },
+  { label: "Settings", href: "/settings" },
 ];
 
 export const Sidebar = () => (
